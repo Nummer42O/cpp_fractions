@@ -22,36 +22,61 @@ namespace frac {
         size_t expanded_numerator = value * expanded_denominator;
         size_t gcd = std::gcd(expanded_denominator, expanded_numerator);
   
+        numerator   = expanded_numerator   / gcd;
+        denominator = expanded_denominator / gcd;
     }
-    Fraction::Fraction(size_t numerator, size_t denominator, bool negative) {
+    Fraction::Fraction(size_t numerator, size_t denominator, bool negative): is_negative(negative) {
+        size_t gcd = std::gcd(denominator, numerator);
         
+        this->numerator   = numerator   / gcd;
+        this->denominator = denominator / gcd;
     }
 
 
     Fraction::Fraction(const Fraction &other) {
-        
+        this->numerator   = other.numerator;
+        this->denominator = other.denominator;
+        this->is_negative = other.is_negative;
     }
     Fraction &Fraction::operator=(const Fraction &other) {
-        
+        this->numerator   = other.numerator;
+        this->denominator = other.denominator;
+        this->is_negative = other.is_negative;
     }
-    Fraction &Fraction::operator=(double other) {
-        
+    Fraction &Fraction::operator=(double value) {
+        if (value < 0) {
+            is_negative = true;
+            value = -value;
+        }
+
+        size_t expanded_denominator = getDenominator(value);
+        size_t expanded_numerator = value * expanded_denominator;
+        size_t gcd = std::gcd(expanded_denominator, expanded_numerator);
+  
+        numerator   = expanded_numerator   / gcd;
+        denominator = expanded_denominator / gcd;
     }
 
 
     Fraction::operator double () {
-        
+        return (2 * static_cast<int>(!is_negative) - 1) * static_cast<double>(numerator) / denominator;
     }
     Fraction::operator long () {
-        
+        return (2 * static_cast<int>(!is_negative) - 1) * numerator / denominator;
     }
     Fraction::operator size_t () {
-        
+        return numerator / denominator;
     }
 
 
     std::ostream &operator<<(std::ostream &stream, const Fraction &frac) {
-        
+        if (frac.is_negative) {
+            stream << '-';
+        }
+
+        stream << frac.numerator << '/' << frac.denominator;
+
+        return stream;
     }
 
 

@@ -13,7 +13,7 @@ namespace frac {
 
             Fraction(const Fraction &other);
             Fraction &operator=(const Fraction &other);
-            Fraction &operator=(double other);
+            Fraction &operator=(double value);
 
 
             operator double ();
