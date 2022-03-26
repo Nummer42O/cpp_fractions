@@ -1,11 +1,10 @@
 #include <stdlib.h>
 #include <iostream>
+#include <string>
 
 namespace frac {
     class Fraction {
         public:
-            size_t numerator, denominator;
-
             Fraction();
             Fraction(double value);
             Fraction(size_t numerator, size_t denominator, bool negative);
@@ -22,6 +21,14 @@ namespace frac {
 
 
             friend std::ostream &operator<<(std::ostream &stream, const Fraction &frac);
+            std::string toString();
+            std::string toString() const;
+
+
+            size_t getNumerator();
+            size_t getNumerator() const;
+            size_t getDenominator();
+            size_t getDenominator() const;
 
 
             Fraction operator++();
@@ -41,6 +48,7 @@ namespace frac {
             Fraction operator--(int);
 
             Fraction operator-();
+            const Fraction operator-() const;
             Fraction operator-(const Fraction &other);
             const Fraction operator-(const Fraction &other) const;
             Fraction operator-(double other);
@@ -52,7 +60,7 @@ namespace frac {
 
 
             Fraction operator*(const Fraction &other);
-            const Fraction operator-(const Fraction &other) const;
+            const Fraction operator*(const Fraction &other) const;
             Fraction operator*(double other);
             const Fraction operator*(double other) const;
             friend double operator*(double left, const Fraction &right);
@@ -85,36 +93,42 @@ namespace frac {
             bool operator<(const Fraction &other) const;
             bool operator<(double other);
             bool operator<(double other) const;
+            friend bool operator<(double left, const Fraction &right);
 
 
             bool operator<=(const Fraction &other);
             bool operator<=(const Fraction &other) const;
             bool operator<=(double other);
             bool operator<=(double other) const;
+            friend bool operator<=(double left, const Fraction &right);
 
 
             bool operator>(const Fraction &other);
             bool operator>(const Fraction &other) const;
             bool operator>(double other);
             bool operator>(double other) const;
+            friend bool operator>(double left, const Fraction &right);
 
 
             bool operator>=(const Fraction &other);
             bool operator>=(const Fraction &other) const;
             bool operator>=(double other);
             bool operator>=(double other) const;
+            friend bool operator>=(double left, const Fraction &right);
 
 
             bool operator==(const Fraction &other);
             bool operator==(const Fraction &other) const;
             bool operator==(double other);
             bool operator==(double other) const;
+            friend bool operator==(double left, const Fraction &right);
 
 
             bool operator!=(const Fraction &other);
             bool operator!=(const Fraction &other) const;
             bool operator!=(double other);
             bool operator!=(double other) const;
+            friend bool operator!=(double left, const Fraction &right);
 
 
             Fraction &pow(double power);
@@ -146,10 +160,33 @@ namespace frac {
             Fraction &invert();
             friend Fraction invert(const Fraction &frac);
             Fraction &expand(size_t factor);
-            friend Fraction expand(const Fraction &frac);
+            friend Fraction expand(const Fraction &frac, size_t factor);
+            Fraction &truncate(size_t factor);
+            friend Fraction truncate(const Fraction &frac, size_t factor);
         private:
+            size_t numerator, denominator;
             bool is_negative = false;
-            size_t getDenominator(double value);
+
+            static size_t getDenominator(double value);
+            void truncate();
+            int getSign();
+
+
+            static const char* make_what(std::string text);
+            struct division_by_zero: public std::exception {
+                const char* what() const throw ();
+
+                division_by_zero(size_t numerator);
+
+                std::string numerator;
+            };
+            struct sqrt_of_negative: public std::exception {
+                const char* what() const throw ();
+
+                sqrt_of_negative(Fraction frac);
+
+                std::string frac;
+            };
     };
 
     std::ostream &operator<<(std::ostream &stream, const Fraction &frac);
@@ -174,5 +211,6 @@ namespace frac {
     Fraction round(const Fraction &frac);
 
     Fraction invert(const Fraction &frac);
-    Fraction expand(const Fraction &frac);
+    Fraction expand(const Fraction &frac, size_t factor);
+    Fraction truncate(const Fraction &frac, size_t factor);
 } // namespace frac
