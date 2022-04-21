@@ -11,11 +11,22 @@
 
 namespace frac {
     //private
+    Fraction::Fraction(double numerator, double denominator) {
+        size_t factor = getDenominator(numerator) * getDenominator(denominator);
+        this->numerator   = numerator   * factor;
+        this->denominator = denominator * factor;
+
+        truncate();
+    }
+
     size_t Fraction::getDenominator(double value) {
         return std::floor(std::log10(value)) + 1;
     }
     void Fraction::truncate() {
         size_t gcd = std::gcd(numerator, denominator);
+        if (gcd == 1) {
+            return;
+        }
         
         numerator   /= gcd;
         denominator /= gcd;
@@ -70,6 +81,9 @@ namespace frac {
         size_t expanded_denom = getDenominator(value);
         size_t expanded_num = value * expanded_denom;
         size_t gcd = std::gcd(expanded_denom, expanded_num);
+        if (gcd == 1) {
+            return;
+        }
   
         numerator   = expanded_num   / gcd;
         denominator = expanded_denom / gcd;
@@ -84,10 +98,7 @@ namespace frac {
             return;
         }
 
-        size_t gcd = std::gcd(denominator, numerator);
-        
-        this->numerator   = numerator   / gcd;
-        this->denominator = denominator / gcd;
+        truncate();
     }
 
 
@@ -117,6 +128,9 @@ namespace frac {
         size_t expanded_denom = getDenominator(value);
         size_t expanded_num = value * expanded_denom;
         size_t gcd = std::gcd(expanded_denom, expanded_num);
+        if (gcd == 1) {
+            return;
+        }
   
         numerator   = expanded_num   / gcd;
         denominator = expanded_denom / gcd;
@@ -1108,29 +1122,33 @@ namespace frac {
     }
 
 
-    Fraction &Fraction::pow(double power) {
-        numerator   = std::pow(numerator, power);
-        denominator = std::pow(denominator, power);
-        long power_l = static_cast<long>(power);
-        is_negative = ((power_l == power) && (power_l % 2)) ? false : is_negative;
+    Fraction &Fraction::pow(double power) { //TODO: make real implementation
+        double num   = std::pow(numerator, power),
+               denom = std::pow(denominator, power);
+        
+        size_t factor = getDenominator(num) * getDenominator(denom);
+        numerator   = num   * factor;
+        denominator = denom * factor;
 
         truncate();
 
+        bool numerator_neg   = numerator < 0,
+             denominator_neg = denominator < 0;
+        is_negative = (numerator_neg && !denominator_neg) || (!numerator_neg && denominator_neg);
+
         return *this;
     }
-    Fraction pow(const Fraction &frac, double power) {
-        long power_l = static_cast<long>(power);
-        bool new_is_negative = ((power_l == power) && (power_l % 2)) ? false : frac.is_negative;
-
-        return Fraction(std::pow(frac.numerator, power), std::pow(frac.denominator, power), new_is_negative);
+    Fraction pow(const Fraction &frac, double power) { //TODO: make real implementation
+        return Fraction(std::pow(frac.numerator, power) / std::pow(frac.denominator, power));
     }
-    Fraction &Fraction::sqrt() {
+    Fraction &Fraction::sqrt() { //TODO: make real implementation
         if (is_negative) {
             throw sqrt_of_negative(*this);
         } else if (numerator == 0) {
             return *this;
         }
 
+        /*
         Fraction high = *this,
                  low(0, 1, false),
                  guess = *this / 2.0;
@@ -1148,18 +1166,29 @@ namespace frac {
         numerator   = guess.numerator;
         denominator = guess.denominator;
         is_negative = guess.is_negative;
+        */
+
+        double num   = std::sqrt(numerator),
+               denom = std::sqrt(denominator);
+        
+        size_t factor = getDenominator(num) * getDenominator(denom);
+        numerator   = num   * factor;
+        denominator = denom * factor;
+
+        is_negative = false;
 
         truncate();
 
         return *this;
     }
-    Fraction sqrt(const Fraction &frac) {
+    Fraction sqrt(const Fraction &frac) { //TODO: make real implementation
         if (frac.is_negative) {
             throw Fraction::sqrt_of_negative(frac);
         } else if (frac.numerator == 0) {
             return frac;
         }
 
+        /*
         Fraction high = frac,
                  low(0, 1, false),
                  guess = frac / 2.0;
@@ -1175,8 +1204,12 @@ namespace frac {
         }
 
         return guess;
+        */
+       
+        return Fraction(sqrt(frac.numerator), sqrt(frac.denominator));
     }
-    Fraction &Fraction::exp() {
+    Fraction &Fraction::exp() { //TODO: make real implementation
+        /*
         size_t i = 1;
         double denom = 1;
         Fraction result(1, 1, false),
@@ -1197,10 +1230,23 @@ namespace frac {
         numerator   = result.numerator;
         denominator = result.denominator;
         is_negative = result.is_negative;
+        */
+        
+        double num   = std::exp(numerator),
+               denom = std::exp(denominator);
+        
+        size_t factor = getDenominator(num) * getDenominator(denom);
+        numerator   = num   * factor;
+        denominator = denom * factor;
+
+        is_negative = false;
+
+        truncate();
 
         return *this;
     }
-    Fraction exp(const Fraction &frac) {
+    Fraction exp(const Fraction &frac) { //TODO: make real implementation
+        /*
         size_t i = 1;
         double denom = 1;
         Fraction result(1, 1, false),
@@ -1217,79 +1263,112 @@ namespace frac {
 
             i += 1;
         } while (result - previous < EXP_TOLERANCE);
+        */
         
-        return result;
+        return Fraction(std::exp(frac.numerator / frac.denominator));
     }
-    Fraction &Fraction::exp10() {
-        //TODO: make real implementation
+    Fraction &Fraction::exp2() { //TODO: make real implementation
+        double num   = std::exp2(numerator),
+               denom = std::exp2(denominator);
+        
+        size_t factor = getDenominator(num) * getDenominator(denom);
+        numerator   = num   * factor;
+        denominator = denom * factor;
 
-        double numerator_d = static_cast<double>(numerator), denominator_d = static_cast<double>(denominator);
-        double value = std::exp10(numerator_d / denominator_d);
+        is_negative = false;
 
-        if (value == 0) {
-            numerator   = 0;
-            denominator = 1;
+        truncate();
 
-            return;
-        } else if (value < 0) {
-            is_negative = true;
-            value = -value;
-        }
+        return *this;
+    }
+    Fraction exp2(const Fraction &frac) { //TODO: make real implementation
+        return Fraction(std::exp2(frac.numerator / frac.denominator));
+    }
+    Fraction &Fraction::log() { //TODO: make real implementation
+        double num   = std::log(numerator),
+               denom = std::log(denominator);
+        
+        size_t factor = getDenominator(num) * getDenominator(denom);
+        numerator   = num   * factor;
+        denominator = denom * factor;
 
-        size_t expanded_denom = getDenominator(value);
-        size_t expanded_num = value * expanded_denom;
-        size_t gcd = std::gcd(expanded_denom, expanded_num);
-  
-        numerator   = expanded_num   / gcd;
-        denominator = expanded_denom / gcd;
+        truncate();
+
+        bool numerator_neg   = numerator < 0,
+             denominator_neg = denominator < 0;
+        is_negative = (numerator_neg && !denominator_neg) || (!numerator_neg && denominator_neg);
+
+        return *this;
     }
-    Fraction exp10(const Fraction &frac) {
-        
+    Fraction log(const Fraction &frac) { //TODO: make real implementation
+        return Fraction(std::log(frac.numerator) - std::log(frac.denominator)); //log(a/b) = log(a) - log(b)
     }
-    Fraction &Fraction::exp2() {
+    Fraction &Fraction::log10() { //TODO: make real implementation
+        double num   = std::log10(numerator),
+               denom = std::log10(denominator);
         
+        size_t factor = getDenominator(num) * getDenominator(denom);
+        numerator   = num   * factor;
+        denominator = denom * factor;
+
+        truncate();
+
+        bool numerator_neg   = numerator < 0,
+             denominator_neg = denominator < 0;
+        is_negative = (numerator_neg && !denominator_neg) || (!numerator_neg && denominator_neg);
+
+        return *this;
     }
-    Fraction exp2(const Fraction &frac) {
-        
+    Fraction log10(const Fraction &frac) { //TODO: make real implementation
+        return Fraction(std::log(frac.numerator) - std::log(frac.denominator));
     }
-    Fraction &Fraction::log() {
+    Fraction &Fraction::log2() { //TODO: make real implementation
+        double num   = std::log2(numerator),
+               denom = std::log2(denominator);
         
+        size_t factor = getDenominator(num) * getDenominator(denom);
+        numerator   = num   * factor;
+        denominator = denom * factor;
+
+        truncate();
+
+        bool numerator_neg   = numerator < 0,
+             denominator_neg = denominator < 0;
+        is_negative = (numerator_neg && !denominator_neg) || (!numerator_neg && denominator_neg);
+
+        return *this;
     }
-    Fraction log(const Fraction &frac) {
-        
-    }
-    Fraction &Fraction::log10() {
-        
-    }
-    Fraction log10(const Fraction &frac) {
-        
-    }
-    Fraction &Fraction::log2() {
-        
-    }
-    Fraction log2(const Fraction &frac) {
-        
+    Fraction log2(const Fraction &frac) { //TODO: make real implementation
+        return Fraction(std::log2(frac.numerator) - std::log2(frac.denominator));
     }
     Fraction &Fraction::abs() {
-        
+        is_negative = false;
+
+        return *this;
     }
     Fraction abs(const Fraction &frac) {
-        
+        return Fraction(frac.numerator, frac.denominator, false);
     }
     Fraction &Fraction::ceil() {
-        
+        numerator   = numerator / denominator + (numerator % denominator != 0);
+        denominator = 1;
+
+        return *this;
     }
     Fraction ceil(const Fraction &frac) {
-        
+        return (frac.numerator / frac.denominator + (frac.numerator % frac.denominator != 0), 1, frac.is_negative);
     }
     Fraction &Fraction::floor() {
-        
+        numerator   = numerator / denominator;
+        denominator = 1;
+
+        return *this;
     }
     Fraction floor(const Fraction &frac) {
-        
+        return Fraction(frac.numerator / frac.denominator, 1, frac.is_negative);
     }
     Fraction &Fraction::round() {
-        
+        //CONTINUE
     }
     Fraction round(const Fraction &frac) {
         

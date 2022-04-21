@@ -137,8 +137,6 @@ namespace frac {
             friend Fraction sqrt(const Fraction &frac);
             Fraction &exp();
             friend Fraction exp(const Fraction &frac);
-            Fraction &exp10();
-            friend Fraction exp10(const Fraction &frac);
             Fraction &exp2();
             friend Fraction exp2(const Fraction &frac);
             Fraction &log();
@@ -166,6 +164,8 @@ namespace frac {
         private:
             size_t numerator, denominator;
             bool is_negative = false;
+
+            Fraction(double numerator, double denominator); //expecteds fraction to always be positive
 
             static size_t getDenominator(double value);
             void truncate();
