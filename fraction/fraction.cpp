@@ -1221,7 +1221,27 @@ namespace frac {
         return result;
     }
     Fraction &Fraction::exp10() {
-        //HÄ?
+        //TODO: make real implementation
+
+        double numerator_d = static_cast<double>(numerator), denominator_d = static_cast<double>(denominator);
+        double value = std::exp10(numerator_d / denominator_d);
+
+        if (value == 0) {
+            numerator   = 0;
+            denominator = 1;
+
+            return;
+        } else if (value < 0) {
+            is_negative = true;
+            value = -value;
+        }
+
+        size_t expanded_denom = getDenominator(value);
+        size_t expanded_num = value * expanded_denom;
+        size_t gcd = std::gcd(expanded_denom, expanded_num);
+  
+        numerator   = expanded_num   / gcd;
+        denominator = expanded_denom / gcd;
     }
     Fraction exp10(const Fraction &frac) {
         
