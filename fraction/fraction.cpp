@@ -18,9 +18,11 @@ namespace frac {
 
         truncate();
     }
+    Fraction::Fraction(size_t numerator, size_t denominator, bool is_negative, char): numerator(numerator), denominator(denominator), is_negative(is_negative) {}
 
     size_t Fraction::getDenominator(double value) {
-        return std::floor(std::log10(value)) + 1;
+        std::string string_value = std::to_string(value);
+        return std::pow(10, string_value.size() - string_value.find('.', 0ul) - 1);
     }
     void Fraction::truncate() {
         size_t gcd = std::gcd(numerator, denominator);
@@ -57,8 +59,16 @@ namespace frac {
     const char* Fraction::sqrt_of_negative::what() const throw () {
         return make_what("Taking the square root of " + frac + " results in imaginary fractions.");
     }
-    Fraction::sqrt_of_negative::sqrt_of_negative(Fraction frac) {
+    Fraction::sqrt_of_negative::sqrt_of_negative(const Fraction &frac) {
         this->frac = frac.toString();
+    }
+    //------------------- illegal truncation ---------------------------
+    const char* Fraction::illegal_truncation::what() const throw () {
+        return make_what("Can not truncate " + frac + " by factor " + factor + ".");
+    }
+    Fraction::illegal_truncation::illegal_truncation(const Fraction &frac, size_t factor) {
+        this->frac = frac.toString();
+        this->factor = std::to_string(factor);
     }
     //------------------------------------------------------------------
 
@@ -128,12 +138,10 @@ namespace frac {
         size_t expanded_denom = getDenominator(value);
         size_t expanded_num = value * expanded_denom;
         size_t gcd = std::gcd(expanded_denom, expanded_num);
-        if (gcd == 1) {
-            return;
+        if (gcd != 1) {
+            numerator   = expanded_num   / gcd;
+            denominator = expanded_denom / gcd;
         }
-  
-        numerator   = expanded_num   / gcd;
-        denominator = expanded_denom / gcd;
 
         return *this;
     }
@@ -156,7 +164,7 @@ namespace frac {
         return stream;
     }
     std::string Fraction::toString() {
-        static_cast<const Fraction &>(*this).toString();
+        return static_cast<const Fraction &>(*this).toString();
     }
     std::string Fraction::toString() const {
         std::string output = std::to_string(numerator) + '/' + std::to_string(denominator);
@@ -698,6 +706,8 @@ namespace frac {
 
         numerator   = left_num % right_num;
         denominator = common_denom;
+
+        return *this;
     }
     Fraction &Fraction::operator%=(double other) {
         if (other < 0) {
@@ -717,6 +727,8 @@ namespace frac {
 
         numerator   = left_num % right_num;
         denominator = common_denom;
+
+        return *this;
     }
 
 
@@ -1368,29 +1380,63 @@ namespace frac {
         return Fraction(frac.numerator / frac.denominator, 1, frac.is_negative);
     }
     Fraction &Fraction::round() {
-        //CONTINUE
+        size_t residue = numerator % denominator;
+        numerator = numerator / denominator + (denominator - residue <= residue);
+        denominator = 1;
+
+        return *this;
     }
     Fraction round(const Fraction &frac) {
+        size_t residue = frac.numerator % frac.denominator;
         
+        return Fraction(frac.numerator / frac.denominator + (frac.denominator - residue <= residue), 1, frac.is_negative);
     }
 
 
     Fraction &Fraction::invert() {
-        
+        std::swap(numerator, denominator);
+
+        return *this;
     }
     Fraction invert(const Fraction &frac) {
-        
+        return Fraction(frac.denominator, frac.numerator, frac.is_negative);
     }
     Fraction &Fraction::expand(size_t factor) {
-        
+        if (factor == 0) {
+            throw division_by_zero(numerator);
+        }
+
+        numerator   *= factor;
+        denominator *= factor;
+
+        return *this;
     }
     Fraction expand(const Fraction &frac, size_t factor) {
-        
+        if (factor == 0) {
+            throw Fraction::division_by_zero(frac.numerator);
+        }
+
+        return Fraction(frac.numerator * factor, frac.denominator * factor, frac.is_negative, '\0');
     }
     Fraction &Fraction::truncate(size_t factor) {
+        if (factor == 0) {
+            throw division_by_zero(numerator);
+        } else if (numerator % factor != 0 || denominator % factor != 0) {
+            throw illegal_truncation(*this, factor);
+        }
 
+        numerator   /= factor;
+        denominator /= factor;
+
+        return *this;
     }
     Fraction truncate(const Fraction &frac, size_t factor) {
+        if (factor == 0) {
+            throw Fraction::division_by_zero(frac.numerator);
+        } else if (frac.numerator % factor != 0 || frac.denominator % factor != 0) {
+            throw Fraction::illegal_truncation(frac, factor);
+        }
 
+        return Fraction(frac.numerator / factor, frac.denominator / factor, frac.is_negative, '\0');
     }
 } // namespace frac

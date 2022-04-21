@@ -166,6 +166,7 @@ namespace frac {
             bool is_negative = false;
 
             Fraction(double numerator, double denominator); //expecteds fraction to always be positive
+            Fraction(size_t numerator, size_t denominator, bool is_negative, char); //like default constructor but doesn't truncate - char for differenciation
 
             static size_t getDenominator(double value);
             void truncate();
@@ -183,9 +184,16 @@ namespace frac {
             struct sqrt_of_negative: public std::exception {
                 const char* what() const throw ();
 
-                sqrt_of_negative(Fraction frac);
+                sqrt_of_negative(const Fraction &frac);
 
                 std::string frac;
+            };
+            struct illegal_truncation: public std::exception {
+                const char* what() const throw ();
+
+                illegal_truncation(const Fraction &frac, size_t factor);
+
+                std::string frac, factor;
             };
     };
 
