@@ -108,6 +108,9 @@ namespace frac {
             return;
         }
 
+        this->numerator   = numerator;
+        this->denominator = denominator;
+
         truncate();
     }
 
