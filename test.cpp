@@ -14,9 +14,9 @@ int main(int argc, char* argv[]) {
               << f3 << '\n'
               << f4 << '\n';
 
-    std::cout << "double of 1/2: " << static_cast<double>(f1) << '\n'
-              << "long of 1/2: " << static_cast<long>(f1) << '\n'
-              << "size_t of 1/2: " << static_cast<size_t>(f1) << '\n';
+    std::cout << "double of -5/4: " << static_cast<double>(f3) << '\n'
+              << "long of -5/4: " << static_cast<long>(f3) << '\n'
+              << "size_t of -5/4: " << static_cast<size_t>(f3) << '\n';
 
     std::cout << "numerator of f3: " << f3.getNumerator() << '\n'
               << "denominator of f3: " << f3.getDenominator() << '\n';
@@ -32,11 +32,11 @@ int main(int argc, char* argv[]) {
         std::cout << "temporary: frac = 1/2\n"
                   << "frac++ (pre, output, post): " << frac << ", " << frac++ << ", " << frac << '\n'
                   << "++frac (pre, output, post): " << frac << ", " << ++frac << ", " << frac << '\n'
-                  << "frac + 1/2 = " << frac + f2 << '\n'
+                  << "frac + 1/2 = " << frac + f1 << '\n'
                   << "frac + 0.5 = " << frac + .5 << '\n'
                   << "0.5 + frac = " << .5 + frac << '\n'
-                  << "frac += 1/2: " << frac_iadd_f << '\n'
-                  << "frac += 0.5: " << frac_iadd_d << '\n';
+                  << "1/2 += 1/2: " << frac_iadd_f << '\n'
+                  << "1/2 += 0.5: " << frac_iadd_d << '\n';
     }
 
     { //Subtraction
@@ -48,13 +48,14 @@ int main(int argc, char* argv[]) {
         frac_isub_d -= .5;
 
         std::cout << "temporary: frac = 1/2\n"
+                  << "-frac = " << -frac << '\n'
                   << "frac-- (pre, output, post): " << frac << ", " << frac-- << ", " << frac << '\n'
                   << "--frac (pre, output, post): " << frac << ", " << --frac << ", " << frac << '\n'
-                  << "frac - 1/2 = " << frac - f2 << '\n'
+                  << "frac - 1/2 = " << frac - f1 << '\n'
                   << "frac - 0.5 = " << frac - .5 << '\n'
                   << "0.5 - frac = " << .5 - frac << '\n'
-                  << "frac -= 1/2: " << frac_isub_f << '\n'
-                  << "frac -= 0.5: " << frac_isub_d << '\n';
+                  << "1/2 -= 1/2: " << frac_isub_f << '\n'
+                  << "1/2 -= 0.5: " << frac_isub_d << '\n';
     }
 
     { //Multiplication
@@ -66,11 +67,11 @@ int main(int argc, char* argv[]) {
         frac_imul_d *= .5;
 
         std::cout << "temporary: frac = 1/2\n"
-                  << "frac * 1/2 = " << frac * f2 << '\n'
+                  << "frac * 1/2 = " << frac * f1 << '\n'
                   << "frac * 0.5 = " << frac * .5 << '\n'
                   << "0.5 * frac = " << .5 * frac << '\n'
-                  << "frac *= 1/2: " << frac_imul_f << '\n'
-                  << "frac *= 0.5: " << frac_imul_d << '\n';
+                  << "1/2 *= 1/2: " << frac_imul_f << '\n'
+                  << "1/2 *= 0.5: " << frac_imul_d << '\n';
     }
 
     { //Division
@@ -82,11 +83,11 @@ int main(int argc, char* argv[]) {
         frac_idiv_d /= .5;
 
         std::cout << "temporary: frac = 1/2\n"
-                  << "frac / 1/2 = " << frac / f2 << '\n'
+                  << "frac / 1/2 = " << frac / f1 << '\n'
                   << "frac / 0.5 = " << frac / .5 << '\n'
                   << "0.5 / frac = " << .5 / frac << '\n'
-                  << "frac /= 1/2: " << frac_idiv_f << '\n'
-                  << "frac /= 0.5: " << frac_idiv_d << '\n';
+                  << "1/2 /= 1/2: " << frac_idiv_f << '\n'
+                  << "1/2 /= 0.5: " << frac_idiv_d << '\n';
     }
 
     { //Modulo
@@ -98,10 +99,10 @@ int main(int argc, char* argv[]) {
         frac_imod_d %= .5;
 
         std::cout << "temporary: frac = 1/2\n"
-                  << "frac % 1/2 = " << frac % f2 << '\n'
+                  << "frac % 1/2 = " << frac % f1 << '\n'
                   << "frac % 0.5 = " << frac % .5 << '\n'
-                  << "frac %= 1/2: " << frac_imod_f << '\n'
-                  << "frac %= 0.5: " << frac_imod_d << '\n';
+                  << "1/2 %= 1/2: " << frac_imod_f << '\n'
+                  << "1/2 %= 0.5: " << frac_imod_d << '\n';
     }
 
     //Comparisons
