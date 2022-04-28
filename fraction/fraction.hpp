@@ -202,7 +202,6 @@ namespace frac {
     double operator-(double left, const Fraction &right);
     double operator*(double left, const Fraction &right);
     double operator/(double left, const Fraction &right);
-    double operator%(double left, const Fraction &right);
 
     Fraction pow(const Fraction &frac, double power);
     Fraction sqrt(const Fraction &frac);
