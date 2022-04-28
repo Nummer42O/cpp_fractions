@@ -33,7 +33,7 @@ namespace frac {
         numerator   /= gcd;
         denominator /= gcd;
     }
-    int Fraction::getSign() {
+    int Fraction::getSign(bool is_negative) {
         return (2 * !is_negative) - 1;
     }
 
@@ -148,10 +148,10 @@ namespace frac {
 
 
     Fraction::operator double () {
-        return getSign() * static_cast<double>(numerator) / denominator;
+        return getSign(is_negative) * static_cast<double>(numerator) / denominator;
     }
     Fraction::operator long () {
-        return getSign() * numerator / denominator;
+        return getSign(is_negative) * numerator / denominator;
     }
     Fraction::operator size_t () {
         return numerator / denominator;
@@ -267,26 +267,13 @@ namespace frac {
         }
     }
     double operator+(double left, const Fraction &right) {
-        bool left_is_negative = false;
-        if (left < 0) {
-            left_is_negative = true;
-            left = -left;
-        }
-
-        size_t other_denom = Fraction::getDenominator(left);
-        size_t other_num = left * other_denom;
-
-        size_t common_denom = std::lcm(right.denominator, other_denom);
-        size_t left_num  = other_num       * common_denom / other_denom,
-               right_num = right.numerator * common_denom / right.denominator;
-
-        if (right.is_negative == left_is_negative) {
-            return Fraction(left_num + right_num, common_denom, right.is_negative);
-        } else if (left_num < right_num) {
-            return Fraction(right_num - left_num, common_denom, left_is_negative);
+        if (right.is_negative) {
+            left -= static_cast<double>(right.numerator) / right.denominator;
         } else {
-            return Fraction(left_num - right_num, common_denom, right.is_negative);
+            left += static_cast<double>(right.numerator) / right.denominator;
         }
+
+        return left;
     }
 
     Fraction &Fraction::operator+=(const Fraction &other) {
@@ -426,26 +413,13 @@ namespace frac {
         }
     }
     double operator-(double left, const Fraction &right) {
-        bool left_is_negative = false;
-        if (left < 0) {
-            left_is_negative = true;
-            left = -left;
-        }
-
-        size_t other_denom = Fraction::getDenominator(left);
-        size_t other_num = left * other_denom;
-
-        size_t common_denom = std::lcm(right.denominator, other_denom);
-        size_t left_num  = other_num        * common_denom / other_denom,
-               right_num = right.numerator * common_denom / right.denominator;
-
-        if (right.is_negative != left_is_negative) {
-            return Fraction(left_num - right_num, common_denom, right.is_negative);
-        } else if (left_num < right_num) {
-            return Fraction(right_num - left_num, common_denom, !right.is_negative);
+        if (right.is_negative) {
+            left += static_cast<double>(right.numerator) / right.denominator;
         } else {
-            return Fraction(left_num - right_num, common_denom, right.is_negative);
+            left -= static_cast<double>(right.numerator) / right.denominator;
         }
+
+        return left;
     }
 
     Fraction &Fraction::operator-=(const Fraction &other) {
@@ -522,17 +496,15 @@ namespace frac {
         return Fraction(expanded_num * numerator / gcd, expanded_denom * denominator / gcd, !(is_negative == other_is_negative));
     }
     double operator*(double left, const Fraction &right) {
-        bool left_is_negative = false;
-        if (left < 0) {
-            left_is_negative = true;
-            left = -left;
+        if (right.is_negative) {
+            left *= -right.numerator;
+        } else {
+            left *= right.numerator;
         }
 
-        size_t other_denom = Fraction::getDenominator(left);
-        size_t other_num = left * other_denom;
-        size_t gcd = std::gcd(other_denom, other_num);
-        
-        return Fraction(other_num * right.numerator / gcd, other_denom * right.denominator / gcd, !(right.is_negative == left_is_negative));
+        left /= right.denominator;
+
+        return left;
     }
 
     Fraction &Fraction::operator*=(const Fraction &other) {
@@ -588,17 +560,15 @@ namespace frac {
         return Fraction(expanded_denom * numerator / gcd, expanded_num * denominator / gcd, !(is_negative == other_is_negative));
     }
     double operator/(double left, const Fraction &right) {
-        bool left_is_negative = false;
-        if (left < 0) {
-            left_is_negative = true;
-            left = -left;
+        if (right.is_negative) {
+            left *= -right.denominator;
+        } else {
+            left *= right.denominator;
         }
 
-        size_t other_denom = Fraction::getDenominator(left);
-        size_t other_num = left * other_denom;
-        size_t gcd = std::gcd(other_denom, other_num);
-        
-        return Fraction(other_num * right.denominator / gcd, other_denom * right.numerator / gcd, !(right.is_negative == left_is_negative));
+        left /= right.numerator;
+
+        return left;
     }
 
     Fraction &Fraction::operator/=(const Fraction &other) {
@@ -677,26 +647,6 @@ namespace frac {
                right_num = other_num * common_denom / other_denom;
 
         return Fraction(left_num % right_num, common_denom, is_negative);
-    }
-    double operator%(double left, const Fraction &right) {
-        bool left_is_negative = false;
-        if (left < 0) {
-            left_is_negative = true;
-            left = -left;
-        }
-
-        size_t other_denom = Fraction::getDenominator(left);
-        size_t other_num = left * other_denom;
-        size_t gcd = std::gcd(other_denom, other_num);
-
-        other_num   /= gcd;
-        other_denom /= gcd;
-
-        size_t common_denom = std::lcm(right.denominator, other_denom);
-        size_t left_num  = other_num * common_denom / other_denom,
-               right_num = right.numerator * common_denom / right.denominator;
-
-        return Fraction(left_num % right_num, common_denom, left_is_negative);
     }
 
     Fraction &Fraction::operator%=(const Fraction &other) {
@@ -1218,7 +1168,7 @@ namespace frac {
         return guess;
         */
        
-        return Fraction(sqrt(frac.numerator), sqrt(frac.denominator));
+        return Fraction(std::sqrt(frac.numerator), std::sqrt(frac.denominator));
     }
     Fraction &Fraction::exp() { //TODO: make real implementation
         /*

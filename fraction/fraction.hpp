@@ -15,9 +15,9 @@ namespace frac {
             Fraction &operator=(double value);
 
 
-            operator double ();
-            operator long ();
-            operator size_t ();
+            explicit operator double ();
+            explicit operator long ();
+            explicit operator size_t ();
 
 
             friend std::ostream &operator<<(std::ostream &stream, const Fraction &frac);
@@ -83,7 +83,6 @@ namespace frac {
             const Fraction operator%(const Fraction &other) const;
             Fraction operator%(double other);
             const Fraction operator%(double other) const;
-            friend double operator%(double left, const Fraction &right);
 
             Fraction &operator%=(const Fraction &other);
             Fraction &operator%=(double other);
@@ -170,7 +169,7 @@ namespace frac {
 
             static size_t getDenominator(double value);
             void truncate();
-            int getSign();
+            static int getSign(bool is_negative);
 
 
             static const char* make_what(std::string text);
