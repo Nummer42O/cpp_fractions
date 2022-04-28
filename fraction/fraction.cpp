@@ -154,7 +154,7 @@ namespace frac {
         return getSign(is_negative) * static_cast<double>(numerator) / denominator;
     }
     Fraction::operator long () {
-        return getSign(is_negative) * numerator / denominator;
+        return (numerator / denominator) * getSign(is_negative);
     }
     Fraction::operator size_t () {
         return numerator / denominator;
