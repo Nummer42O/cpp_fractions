@@ -1230,7 +1230,7 @@ namespace frac {
         } while (result - previous < EXP_TOLERANCE);
         */
         
-        return Fraction(std::exp(frac.numerator / frac.denominator));
+        return Fraction(std::exp(static_cast<double>(frac.numerator) / frac.denominator));
     }
     Fraction &Fraction::exp2() { //TODO: make real implementation
         double num   = std::exp2(numerator),
