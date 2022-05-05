@@ -187,6 +187,13 @@ namespace frac {
 
                 std::string frac;
             };
+            struct log_of_negative: public std::exception {
+                const char* what() const throw ();
+
+                log_of_negative(const Fraction &frac);
+
+                std::string frac;
+            };
             struct illegal_truncation: public std::exception {
                 const char* what() const throw ();
 
