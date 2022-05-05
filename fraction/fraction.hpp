@@ -132,6 +132,8 @@ namespace frac {
 
             Fraction &pow(double power);
             friend Fraction pow(const Fraction &frac, double power);
+            Fraction &pow(const Fraction &power);
+            friend Fraction pow(const Fraction &frac, const Fraction &power);
             Fraction &sqrt();
             friend Fraction sqrt(const Fraction &frac);
             Fraction &exp();
@@ -211,6 +213,7 @@ namespace frac {
     double operator/(double left, const Fraction &right);
 
     Fraction pow(const Fraction &frac, double power);
+    Fraction pow(const Fraction &frac, const Fraction &power);
     Fraction sqrt(const Fraction &frac);
     Fraction exp(const Fraction &frac);
     Fraction exp10(const Fraction &frac);

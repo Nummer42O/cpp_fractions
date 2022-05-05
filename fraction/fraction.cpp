@@ -1091,24 +1091,25 @@ namespace frac {
     }
 
 
-    Fraction &Fraction::pow(double power) { //TODO: make real implementation
-        double num   = std::pow(numerator, power),
-               denom = std::pow(denominator, power);
-        
-        size_t factor = getDenominator(num) * getDenominator(denom);
-        numerator   = num   * factor;
-        denominator = denom * factor;
-
-        truncate();
-
-        bool numerator_neg   = numerator < 0,
-             denominator_neg = denominator < 0;
-        is_negative = (numerator_neg && !denominator_neg) || (!numerator_neg && denominator_neg);
+    Fraction &Fraction::pow(double power) {
+        this->log();
+        this->operator*=(power);
+        this->exp();
 
         return *this;
     }
-    Fraction pow(const Fraction &frac, double power) { //TODO: make real implementation
-        return Fraction(std::pow(frac.numerator, power) / std::pow(frac.denominator, power));
+    Fraction pow(const Fraction &frac, double power) {
+        return frac::exp(frac::log(frac) * power);
+    }
+    Fraction &Fraction::pow(const Fraction &power) {
+        this->log();
+        this->operator*=(power);
+        this->exp();
+
+        return *this;
+    }
+    Fraction pow(const Fraction &frac, const Fraction &power) {
+        return frac::exp(frac::log(frac) * power);
     }
     Fraction &Fraction::sqrt() { //TODO: make real implementation
         if (is_negative) {
