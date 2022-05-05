@@ -107,7 +107,7 @@ namespace frac {
             throw division_by_zero(numerator);
         } else if (numerator == 0) {
             this->numerator   = 0;
-            this->denominator = 0;
+            this->denominator = 1;
 
             return;
         }
@@ -1354,7 +1354,7 @@ namespace frac {
         return *this;
     }
     Fraction ceil(const Fraction &frac) {
-        return (frac.numerator / frac.denominator + (frac.numerator % frac.denominator != 0), 1, frac.is_negative);
+        return Fraction(frac.numerator / frac.denominator + (frac.numerator % frac.denominator != 0), 1, frac.is_negative);
     }
     Fraction &Fraction::floor() {
         numerator   = numerator / denominator;
