@@ -9,17 +9,17 @@ int main(int argc, char* argv[]) {
                    f2(5ul, 4ul, false), //from num, denom, sign
                    f3(5ul, 4ul, true),  //from num, denom, sign
                    f4;              //default constructor (1/1)
-    std::cout << f1 << '\n'
-              << f2 << '\n'
-              << f3 << '\n'
-              << f4 << '\n';
+    std::cout << "f1 = " << f1 << '\n'
+              << "f2 = " << f2 << '\n'
+              << "f3 = " << f3 << '\n'
+              << "f4 = " << f4 << '\n';
 
     std::cout << "double of -5/4: " << static_cast<double>(f3) << '\n'
               << "long of -5/4: " << static_cast<long>(f3) << '\n'
               << "size_t of -5/4: " << static_cast<size_t>(f3) << '\n';
 
     std::cout << "numerator of f3: " << f3.getNumerator() << '\n'
-              << "denominator of f3: " << f3.getDenominator() << '\n';
+              << "denominator of f3: " << f3.getDenominator() << "\n\n";
 
     { //Addition
         frac::Fraction frac = f1,
@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
                   << "frac + 0.5 = " << frac + .5 << '\n'
                   << "0.5 + frac = " << .5 + frac << '\n'
                   << "1/2 += 1/2: " << frac_iadd_f << '\n'
-                  << "1/2 += 0.5: " << frac_iadd_d << '\n';
+                  << "1/2 += 0.5: " << frac_iadd_d << "\n\n";
     }
 
     { //Subtraction
@@ -55,7 +55,7 @@ int main(int argc, char* argv[]) {
                   << "frac - 0.5 = " << frac - .5 << '\n'
                   << "0.5 - frac = " << .5 - frac << '\n'
                   << "1/2 -= 1/2: " << frac_isub_f << '\n'
-                  << "1/2 -= 0.5: " << frac_isub_d << '\n';
+                  << "1/2 -= 0.5: " << frac_isub_d << "\n\n";
     }
 
     { //Multiplication
@@ -71,7 +71,7 @@ int main(int argc, char* argv[]) {
                   << "frac * 0.5 = " << frac * .5 << '\n'
                   << "0.5 * frac = " << .5 * frac << '\n'
                   << "1/2 *= 1/2: " << frac_imul_f << '\n'
-                  << "1/2 *= 0.5: " << frac_imul_d << '\n';
+                  << "1/2 *= 0.5: " << frac_imul_d << "\n\n";
     }
 
     { //Division
@@ -87,7 +87,7 @@ int main(int argc, char* argv[]) {
                   << "frac / 0.5 = " << frac / .5 << '\n'
                   << "0.5 / frac = " << .5 / frac << '\n'
                   << "1/2 /= 1/2: " << frac_idiv_f << '\n'
-                  << "1/2 /= 0.5: " << frac_idiv_d << '\n';
+                  << "1/2 /= 0.5: " << frac_idiv_d << "\n\n";
     }
 
     { //Modulo
@@ -102,36 +102,36 @@ int main(int argc, char* argv[]) {
                   << "frac % 1/2 = " << frac % f1 << '\n'
                   << "frac % 0.5 = " << frac % .5 << '\n'
                   << "1/2 %= 1/2: " << frac_imod_f << '\n'
-                  << "1/2 %= 0.5: " << frac_imod_d << '\n';
+                  << "1/2 %= 0.5: " << frac_imod_d << "\n\n";
     }
 
     //Comparisons
     std::cout << "-5/4 < 1/2: " << (f3 < f1) << '\n'
               << "-5/4 < 0.5: " << (f3 < .5) << '\n'
-              << "0.5 < -5/4: " << (.5 < f3) << '\n'
+              << "0.5 < -5/4: " << (.5 < f3) << "\n\n"
 
               << "-5/4 > 1/2: " << (f3 > f1) << '\n'
               << "-5/4 > 0.5: " << (f3 > .5) << '\n'
-              << "0.5 > -5/4: " << (.5 > f3) << '\n'
+              << "0.5 > -5/4: " << (.5 > f3) << "\n\n"
 
               << "-5/4 <= 1/2: " << (f3 <= f1) << '\n'
               << "-5/4 <= 0.5: " << (f3 <= .5) << '\n'
-              << "0.5 <= -5/4: " << (.5 <= f3) << '\n'
+              << "0.5 <= -5/4: " << (.5 <= f3) << "\n\n"
 
               << "-5/4 >= 1/2: " << (f3 >= f1) << '\n'
               << "-5/4 >= 0.5: " << (f3 >= .5) << '\n'
-              << "0.5 >= -5/4: " << (.5 >= f3) << '\n'
+              << "0.5 >= -5/4: " << (.5 >= f3) << "\n\n"
 
               << "-5/4 == 1/2: " << (f3 == f1) << '\n'
               << "-5/4 == 0.5: " << (f3 == .5) << '\n'
-              << "0.5 == -5/4: " << (.5 == f3) << '\n'
+              << "0.5 == -5/4: " << (.5 == f3) << "\n\n"
 
               << "-5/4 != 1/2: " << (f3 != f1) << '\n'
               << "-5/4 != 0.5: " << (f3 != .5) << '\n'
-              << "0.5 != -5/4: " << (.5 != f3) << '\n';
+              << "0.5 != -5/4: " << (.5 != f3) << "\n\n";
 
     { //Math methods
-        std::cout << "(Output format: friend, method\n"
+        std::cout << "(Output format: friend, method)\n"
                   << "pow(1/2, 2) = " << frac::pow(f1, 2) << ",\n"
                      "              " << frac::Fraction(f1).pow(2) << '\n'
                   << "sqrt(1/2)   = " << frac::sqrt(f1) << ",\n"
@@ -153,7 +153,7 @@ int main(int argc, char* argv[]) {
                   << "floor(1/2)  = " << frac::floor(f1) << ",\n"
                      "              " << frac::Fraction(f1).floor() << '\n'
                   << "round(1/2)  = " << frac::round(f1) << ",\n"
-                     "              " << frac::Fraction(f1).round() << '\n';
+                     "              " << frac::Fraction(f1).round() << "\n\n";
     }
 
     { //Manipulation methods
