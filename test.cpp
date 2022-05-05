@@ -180,28 +180,30 @@ int main(int argc, char* argv[]) {
 
     { //Math methods
         std::cout << "(Output format: friend, method)\n"
-                  << "pow(1/2, 2) = " << frac::pow(f1, 2) << ",\n"
-                     "              " << frac::Fraction(f1).pow(2) << '\n'
-                  << "sqrt(1/2)   = " << frac::sqrt(f1) << ",\n"
-                     "              " << frac::Fraction(f1).sqrt() << '\n'
-                  << "exp(1/2)    = " << frac::exp(f1) << ",\n"
-                     "              " << frac::Fraction(f1).exp() << '\n'
-                  << "exp2(1/2)   = " << frac::exp2(f1) << ",\n"
-                     "              " << frac::Fraction(f1).exp2() << '\n'
-                  << "log(1/2)    = " << frac::log(f1) << ",\n"
-                     "              " << frac::Fraction(f1).log() << '\n'
-                  << "log10(1/2)  = " << frac::log10(f1) << ",\n"
-                     "              " << frac::Fraction(f1).log10() << '\n'
-                  << "log2(1/2)   = " << frac::log2(f1) << ",\n"
-                     "              " << frac::Fraction(f1).log2() << '\n'
-                  << "abs(1/2)    = " << frac::abs(f1) << ",\n"
-                     "              " << frac::Fraction(f1).abs() << '\n'
-                  << "ceil(1/2)   = " << frac::ceil(f1) << ",\n"
-                     "              " << frac::Fraction(f1).ceil() << '\n'
-                  << "floor(1/2)  = " << frac::floor(f1) << ",\n"
-                     "              " << frac::Fraction(f1).floor() << '\n'
-                  << "round(1/2)  = " << frac::round(f1) << ",\n"
-                     "              " << frac::Fraction(f1).round() << "\n\n";
+                  << "pow(1/2, 2)   = " << frac::pow(f1, 2) << ",\n"
+                     "                " << frac::Fraction(f1).pow(2) << '\n'
+                  << "pow(1/2, 2/1) = " << frac::pow(f1, frac::Fraction(2, 1, false)) << ",\n"
+                     "                " << frac::Fraction(f1).pow(2) << '\n'
+                  << "sqrt(1/2)     = " << frac::sqrt(f1) << ",\n"
+                     "                " << frac::Fraction(f1).sqrt() << '\n'
+                  << "exp(1/2)      = " << frac::exp(f1) << ",\n"
+                     "                " << frac::Fraction(f1).exp() << '\n'
+                  << "exp2(1/2)     = " << frac::exp2(f1) << ",\n"
+                     "                " << frac::Fraction(f1).exp2() << '\n'
+                  << "log(1/2)      = " << frac::log(f1) << ",\n"
+                     "                " << frac::Fraction(f1).log() << '\n'
+                  << "log10(1/2)    = " << frac::log10(f1) << ",\n"
+                     "                " << frac::Fraction(f1).log10() << '\n'
+                  << "log2(1/2)     = " << frac::log2(f1) << ",\n"
+                     "                " << frac::Fraction(f1).log2() << '\n'
+                  << "abs(1/2)      = " << frac::abs(f1) << ",\n"
+                     "                " << frac::Fraction(f1).abs() << '\n'
+                  << "ceil(1/2)     = " << frac::ceil(f1) << ",\n"
+                     "                " << frac::Fraction(f1).ceil() << '\n'
+                  << "floor(1/2)    = " << frac::floor(f1) << ",\n"
+                     "                " << frac::Fraction(f1).floor() << '\n'
+                  << "round(1/2)    = " << frac::round(f1) << ",\n"
+                     "                " << frac::Fraction(f1).round() << "\n\n";
     }
 
     { //Manipulation methods
