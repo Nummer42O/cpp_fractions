@@ -694,7 +694,7 @@ namespace frac {
             size_t left_num  = numerator       * common_denom / denominator,
                 right_num = other.numerator * common_denom / other.denominator;
             
-            return (left_num < right_num) && !is_negative;
+            return (left_num < right_num) ^ is_negative;
         } else {
             return is_negative;
         }
@@ -721,7 +721,7 @@ namespace frac {
             size_t left_num  = numerator * common_denom / denominator,
                    right_num = other_num * common_denom / other_denom;
             
-            return (left_num < right_num) && !is_negative;
+            return (left_num < right_num) ^ is_negative;
         } else {
             return is_negative;
         }
@@ -745,7 +745,7 @@ namespace frac {
             size_t left_num  = other_num * common_denom / other_denom,
                    right_num = right.numerator * common_denom / right.denominator;
             
-            return (left_num < right_num) && !left_is_negative;
+            return (left_num < right_num) ^ left_is_negative;
         } else {
             return left_is_negative;
         }
@@ -759,11 +759,11 @@ namespace frac {
         if (is_negative == other.is_negative) {
             size_t common_denom = std::lcm(denominator, other.denominator);
             size_t left_num  = numerator       * common_denom / denominator,
-                right_num = other.numerator * common_denom / other.denominator;
+                   right_num = other.numerator * common_denom / other.denominator;
             
-            return (left_num <= right_num) && !is_negative;
+            return (left_num <= right_num) ^ is_negative;
         } else {
-            return is_negative;
+            return is_negative || (other.numerator == numerator && numerator == 0);
         }
     }
     bool Fraction::operator<=(double other) {
@@ -788,9 +788,9 @@ namespace frac {
             size_t left_num  = numerator * common_denom / denominator,
                    right_num = other_num * common_denom / other_denom;
             
-            return (left_num <= right_num) && !is_negative;
+            return (left_num <= right_num) ^ is_negative;
         } else {
-            return is_negative;
+            return is_negative || (other == numerator && numerator == 0);
         }
     }
     bool operator<=(double left, const Fraction &right) {
@@ -812,9 +812,9 @@ namespace frac {
             size_t left_num  = other_num * common_denom / other_denom,
                    right_num = right.numerator * common_denom / right.denominator;
             
-            return (left_num <= right_num) && !left_is_negative;
+            return (left_num <= right_num) ^ left_is_negative;
         } else {
-            return left_is_negative;
+            return left_is_negative || (left == right.numerator && right.numerator == 0);
         }
     }
 
@@ -828,9 +828,9 @@ namespace frac {
             size_t left_num  = numerator       * common_denom / denominator,
                 right_num = other.numerator * common_denom / other.denominator;
             
-            return (left_num > right_num) && !is_negative;
+            return (left_num > right_num) ^ is_negative;
         } else {
-            return is_negative;
+            return !is_negative;
         }
     }
     bool Fraction::operator>(double other) {
@@ -855,9 +855,9 @@ namespace frac {
             size_t left_num  = numerator * common_denom / denominator,
                    right_num = other_num * common_denom / other_denom;
             
-            return (left_num > right_num) && !is_negative;
+            return (left_num > right_num) ^ is_negative;
         } else {
-            return is_negative;
+            return !is_negative;
         }
     }
     bool operator>(double left, const Fraction &right) {
@@ -879,9 +879,9 @@ namespace frac {
             size_t left_num  = other_num * common_denom / other_denom,
                    right_num = right.numerator * common_denom / right.denominator;
             
-            return (left_num > right_num) && !left_is_negative;
+            return (left_num > right_num) ^ left_is_negative;
         } else {
-            return left_is_negative;
+            return !left_is_negative;
         }
     }
 
@@ -895,9 +895,9 @@ namespace frac {
             size_t left_num  = numerator       * common_denom / denominator,
                 right_num = other.numerator * common_denom / other.denominator;
             
-            return (left_num >= right_num) && !is_negative;
+            return (left_num >= right_num) ^ is_negative;
         } else {
-            return is_negative;
+            return !is_negative || (other.numerator == numerator && numerator == 0);
         }
     }
     bool Fraction::operator>=(double other) {
@@ -922,9 +922,9 @@ namespace frac {
             size_t left_num  = numerator * common_denom / denominator,
                    right_num = other_num * common_denom / other_denom;
             
-            return (left_num >= right_num) && !is_negative;
+            return (left_num >= right_num) ^ is_negative;
         } else {
-            return is_negative;
+            return !is_negative || (other == numerator && numerator == 0);
         }
     }
     bool operator>=(double left, const Fraction &right) {
@@ -946,9 +946,9 @@ namespace frac {
             size_t left_num  = other_num * common_denom / other_denom,
                    right_num = right.numerator * common_denom / right.denominator;
             
-            return (left_num >= right_num) && !left_is_negative;
+            return (left_num >= right_num) ^ left_is_negative;
         } else {
-            return left_is_negative;
+            return !left_is_negative || (left == right.numerator && right.numerator == 0);
         }
     }
 
