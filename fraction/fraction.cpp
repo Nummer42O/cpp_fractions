@@ -1095,21 +1095,23 @@ namespace frac {
         this->log();
         this->operator*=(power);
         this->exp();
+        this->invert();
 
         return *this;
     }
     Fraction pow(const Fraction &frac, double power) {
-        return frac::exp(frac::log(frac) * power);
+        return frac::invert(frac::exp(frac::log(frac) * power));
     }
     Fraction &Fraction::pow(const Fraction &power) {
         this->log();
         this->operator*=(power);
         this->exp();
+        this->invert();
 
         return *this;
     }
     Fraction pow(const Fraction &frac, const Fraction &power) {
-        return frac::exp(frac::log(frac) * power);
+        return frac::invert(frac::exp(frac::log(frac) * power));
     }
     Fraction &Fraction::sqrt() { //TODO: make real implementation
         if (is_negative) {

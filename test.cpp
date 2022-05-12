@@ -3,6 +3,8 @@
 #include <cstdlib>
 #include <iostream>
 
+#include <cmath>
+
 int main(int argc, char* argv[]) {
     //Constructors
     frac::Fraction f1(0.5),             //  1/2 from double
@@ -215,6 +217,10 @@ int main(int argc, char* argv[]) {
                      "                   " << temp.expand(2) << '\n'
                   << "truncate(2/4, 2) = " << frac::truncate(temp, 2) << ",\n"
                      "                   " << temp.truncate(2) << '\n';
+    }
+
+    { //extra
+        std::cout << "1/2 ^ .5 = " << static_cast<double>(frac::pow(frac::Fraction(4, 1, false), .5)) << " == " << std::sqrt(4) << std::endl;
     }
 
     return 0;
